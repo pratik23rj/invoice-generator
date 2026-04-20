@@ -189,7 +189,7 @@ All monetary values rounded to 2 decimals using **banker's rounding** (round-hal
 5. Increment `invoice_counter`. Write `data.sender` to `sender_cache`. Delete `invoice_draft`.
 6. Reset the form with new defaults (new invoice number, today's dates, empty client, one empty line item). Sender stays pre-filled. User stays on page ready for the next invoice.
 
-**Reset button:** confirmation dialog, then clears form to fresh defaults while preserving `sender_cache`.
+**Reset button:** confirmation dialog, then re-runs the same "initial state on page load" logic above — sender repopulates from `sender_cache`, client/line items/notes clear, a fresh invoice number is generated, dates reset. Also deletes `invoice_draft` so the autosave starts clean. `sender_cache` and `invoice_counter` are preserved.
 
 **Validation boundary:** Zod at form submit only. Calculation and rendering code trusts its inputs because Zod has already shaped them.
 
