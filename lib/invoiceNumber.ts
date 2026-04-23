@@ -24,7 +24,8 @@ export function todayIso(date = new Date()): string {
 
 /** ISO date N days after the given date (for 30-day default due date). */
 export function isoDatePlusDays(base: string, days: number): string {
-  const d = new Date(base);
-  d.setDate(d.getDate() + days);
-  return todayIso(d);
+  const [y, m, d] = base.split("-").map(Number);
+  const dt = new Date(y, m - 1, d);
+  dt.setDate(dt.getDate() + days);
+  return todayIso(dt);
 }
