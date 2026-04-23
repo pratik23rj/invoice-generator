@@ -12,6 +12,7 @@ import { LineItemsTable } from "./form/LineItemsTable";
 import { TaxSection } from "./form/TaxSection";
 import { NotesSection } from "./form/NotesSection";
 import { TotalsSummary } from "./form/TotalsSummary";
+import { ActionBar } from "./form/ActionBar";
 import { PdfPreview } from "./pdf/PdfPreview";
 
 export function InvoicePage() {
@@ -47,6 +48,11 @@ export function InvoicePage() {
             <TaxSection />
             <NotesSection />
             <TotalsSummary />
+            <ActionBar
+              onDownloadSuccess={() => window.alert("PDF downloaded.")}
+              onDownloadError={(msg) => window.alert(`PDF generation failed: ${msg}`)}
+              onReset={() => { /* Task 21 */ }}
+            />
           </section>
           <aside aria-label="PDF preview" className="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
             <PdfPreview />
