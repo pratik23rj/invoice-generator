@@ -1,3 +1,4 @@
+import { InvoicePage } from "@/components/InvoicePage";
 export default function Page() {
-  return <main className="p-8">Invoice Generator — scaffolding</main>;
+  return <InvoicePage />;
 }
