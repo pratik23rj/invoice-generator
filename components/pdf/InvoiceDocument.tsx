@@ -5,6 +5,7 @@ import { registerPdfFonts } from "./registerFonts";
 import { PdfHeader } from "./PdfHeader";
 import { PdfBillTo } from "./PdfBillTo";
 import { PdfLineItemsTable } from "./PdfLineItemsTable";
+import { PdfTotals } from "./PdfTotals";
 
 registerPdfFonts();
 
@@ -15,14 +16,12 @@ export function InvoiceDocument({ invoice }: { invoice: Invoice }) {
         <PdfHeader invoice={invoice} />
         <PdfBillTo invoice={invoice} />
         <PdfLineItemsTable invoice={invoice} />
+        <PdfTotals invoice={invoice} />
 
-        {/* Totals arrive in Task 18 */}
-
-        <Text
-          style={s.footer}
-          render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
-          fixed
-        />
+        <View style={s.footer} fixed>
+          <Text>This is a computer-generated invoice.</Text>
+          <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`} />
+        </View>
       </Page>
     </Document>
   );
