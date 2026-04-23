@@ -13,15 +13,24 @@ import { TaxSection } from "./form/TaxSection";
 import { NotesSection } from "./form/NotesSection";
 import { TotalsSummary } from "./form/TotalsSummary";
 import { ActionBar } from "./form/ActionBar";
+import { ConfirmDialog } from "./form/ConfirmDialog";
 import { PdfPreview } from "./pdf/PdfPreview";
+import { invoiceDraft } from "@/lib/storage";
 
 export function InvoicePage() {
   const [mounted, setMounted] = useState(false);
+  const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   const methods = useForm<Invoice>({
     resolver: zodResolver(InvoiceSchema),
     mode: "onChange",
     defaultValues: buildFreshDefaults(),
   });
+
+  const handleResetConfirmed = () => {
+    methods.reset(buildFreshDefaults());
+    invoiceDraft.clear();
+    setConfirmResetOpen(false);
+  };
 
   // After hydration, replace SSR-safe defaults with localStorage-aware ones.
   useEffect(() => {
@@ -51,7 +60,7 @@ export function InvoicePage() {
             <ActionBar
               onDownloadSuccess={() => window.alert("PDF downloaded.")}
               onDownloadError={(msg) => window.alert(`PDF generation failed: ${msg}`)}
-              onReset={() => { /* Task 21 */ }}
+              onReset={() => setConfirmResetOpen(true)}
             />
           </section>
           <aside aria-label="PDF preview" className="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
@@ -59,6 +68,14 @@ export function InvoicePage() {
           </aside>
         </div>
       </main>
+      <ConfirmDialog
+        open={confirmResetOpen}
+        title="Reset invoice?"
+        description="This clears the client, line items, notes, and generates a new invoice number. Your sender details are preserved."
+        confirmLabel="Reset"
+        onConfirm={handleResetConfirmed}
+        onCancel={() => setConfirmResetOpen(false)}
+      />
     </FormProvider>
   );
 }
