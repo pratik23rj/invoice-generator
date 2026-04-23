@@ -12,6 +12,7 @@ import { LineItemsTable } from "./form/LineItemsTable";
 import { TaxSection } from "./form/TaxSection";
 import { NotesSection } from "./form/NotesSection";
 import { TotalsSummary } from "./form/TotalsSummary";
+import { PdfPreview } from "./pdf/PdfPreview";
 
 export function InvoicePage() {
   const [mounted, setMounted] = useState(false);
@@ -48,9 +49,7 @@ export function InvoicePage() {
             <TotalsSummary />
           </section>
           <aside aria-label="PDF preview" className="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
-            <div className="bg-white border border-slate-200 rounded-lg h-full flex items-center justify-center text-slate-400">
-              Preview appears here
-            </div>
+            <PdfPreview />
           </aside>
         </div>
       </main>
