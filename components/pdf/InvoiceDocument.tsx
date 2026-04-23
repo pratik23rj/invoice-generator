@@ -4,6 +4,7 @@ import { pdfStyles as s } from "./styles";
 import { registerPdfFonts } from "./registerFonts";
 import { PdfHeader } from "./PdfHeader";
 import { PdfBillTo } from "./PdfBillTo";
+import { PdfLineItemsTable } from "./PdfLineItemsTable";
 
 registerPdfFonts();
 
@@ -13,8 +14,9 @@ export function InvoiceDocument({ invoice }: { invoice: Invoice }) {
       <Page size="A4" style={s.page}>
         <PdfHeader invoice={invoice} />
         <PdfBillTo invoice={invoice} />
+        <PdfLineItemsTable invoice={invoice} />
 
-        {/* Line items and totals arrive in Tasks 17 + 18 */}
+        {/* Totals arrive in Task 18 */}
 
         <Text
           style={s.footer}
