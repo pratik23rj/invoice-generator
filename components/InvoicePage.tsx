@@ -14,6 +14,7 @@ import { NotesSection } from "./form/NotesSection";
 import { TotalsSummary } from "./form/TotalsSummary";
 import { ActionBar } from "./form/ActionBar";
 import { ConfirmDialog } from "./form/ConfirmDialog";
+import { DraftAutosave } from "./form/DraftAutosave";
 import { PdfPreview } from "./pdf/PdfPreview";
 import { invoiceDraft } from "@/lib/storage";
 
@@ -46,6 +47,7 @@ export function InvoicePage() {
 
   return (
     <FormProvider {...methods}>
+      <DraftAutosave />
       <main className="min-h-screen bg-slate-50">
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
           <section aria-label="Invoice form" className="space-y-6">
