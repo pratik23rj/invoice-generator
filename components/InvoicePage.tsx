@@ -9,6 +9,7 @@ import { SenderSection } from "./form/SenderSection";
 import { ClientSection } from "./form/ClientSection";
 import { MetaSection } from "./form/MetaSection";
 import { LineItemsTable } from "./form/LineItemsTable";
+import { TaxSection } from "./form/TaxSection";
 
 export function InvoicePage() {
   const [mounted, setMounted] = useState(false);
@@ -40,6 +41,7 @@ export function InvoicePage() {
             <ClientSection />
             <MetaSection />
             <LineItemsTable />
+            <TaxSection />
           </section>
           <aside aria-label="PDF preview" className="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
             <div className="bg-white border border-slate-200 rounded-lg h-full flex items-center justify-center text-slate-400">
