@@ -7,6 +7,7 @@ import { InvoiceSchema, type Invoice } from "@/lib/schema";
 import { buildInitialDefaults, buildFreshDefaults } from "@/lib/defaults";
 import { SenderSection } from "./form/SenderSection";
 import { ClientSection } from "./form/ClientSection";
+import { MetaSection } from "./form/MetaSection";
 
 export function InvoicePage() {
   const [mounted, setMounted] = useState(false);
@@ -36,6 +37,7 @@ export function InvoicePage() {
             <h1 className="text-2xl font-semibold">Invoice</h1>
             <SenderSection />
             <ClientSection />
+            <MetaSection />
           </section>
           <aside aria-label="PDF preview" className="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
             <div className="bg-white border border-slate-200 rounded-lg h-full flex items-center justify-center text-slate-400">
