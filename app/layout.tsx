@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="font-sans bg-paper text-ink" suppressHydrationWarning>
         {children}
+        <Analytics />
       </body>
     </html>
   );
