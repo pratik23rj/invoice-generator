@@ -102,8 +102,8 @@ export function InvoicePage() {
                 onReset={() => setConfirmResetOpen(true)}
               />
               <footer className="pt-8 mt-8 border-t border-ink/10 flex items-center justify-between text-xs text-ink/40">
-                <span className="font-mono tracking-wider uppercase">
-                  Made with care · Mumbai
+                <span className="font-display italic text-sm text-ink/60">
+                  Made by Pratik
                 </span>
                 <span className="font-display italic">— fin —</span>
               </footer>
