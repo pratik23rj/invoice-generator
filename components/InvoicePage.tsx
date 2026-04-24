@@ -16,11 +16,14 @@ import { ActionBar } from "./form/ActionBar";
 import { ConfirmDialog } from "./form/ConfirmDialog";
 import { DraftAutosave } from "./form/DraftAutosave";
 import { PdfPreview } from "./pdf/PdfPreview";
+import { StorageBanner } from "./ui/StorageBanner";
+import { Toast } from "./ui/Toast";
 import { invoiceDraft } from "@/lib/storage";
 
 export function InvoicePage() {
   const [mounted, setMounted] = useState(false);
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; variant: "success" | "error" } | null>(null);
   const methods = useForm<Invoice>({
     resolver: zodResolver(InvoiceSchema),
     mode: "onChange",
@@ -46,7 +49,9 @@ export function InvoicePage() {
   }
 
   return (
-    <FormProvider {...methods}>
+    <>
+      <StorageBanner />
+      <FormProvider {...methods}>
       <DraftAutosave />
       <main className="min-h-screen bg-slate-50">
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
@@ -60,8 +65,8 @@ export function InvoicePage() {
             <NotesSection />
             <TotalsSummary />
             <ActionBar
-              onDownloadSuccess={() => window.alert("PDF downloaded.")}
-              onDownloadError={(msg) => window.alert(`PDF generation failed: ${msg}`)}
+              onDownloadSuccess={() => setToast({ msg: "PDF downloaded.", variant: "success" })}
+              onDownloadError={(msg) => setToast({ msg: `PDF generation failed: ${msg}`, variant: "error" })}
               onReset={() => setConfirmResetOpen(true)}
             />
           </section>
@@ -78,6 +83,12 @@ export function InvoicePage() {
         onConfirm={handleResetConfirmed}
         onCancel={() => setConfirmResetOpen(false)}
       />
-    </FormProvider>
+      <Toast
+        message={toast?.msg ?? null}
+        variant={toast?.variant}
+        onClose={() => setToast(null)}
+      />
+      </FormProvider>
+    </>
   );
 }
