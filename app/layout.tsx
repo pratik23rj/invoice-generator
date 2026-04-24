@@ -23,8 +23,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${instrumentSerif.variable}`}>
-      <body className="font-sans bg-paper text-ink">{children}</body>
+    <html
+      lang="en"
+      className={`${inter.variable} ${instrumentSerif.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="font-sans bg-paper text-ink" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
