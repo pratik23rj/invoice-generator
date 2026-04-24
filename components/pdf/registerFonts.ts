@@ -12,6 +12,7 @@ export function registerPdfFonts() {
     family: "Inter",
     fonts: [
       { src: "/fonts/Inter-Regular.ttf", fontWeight: "normal" },
+      { src: "/fonts/Inter-Italic.ttf", fontWeight: "normal", fontStyle: "italic" },
       { src: "/fonts/Inter-Medium.ttf", fontWeight: 500 },
       { src: "/fonts/Inter-Bold.ttf", fontWeight: "bold" },
     ],
