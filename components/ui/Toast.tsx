@@ -17,18 +17,20 @@ export function Toast({ message, variant = "success", onClose }: Props) {
 
   if (!message) return null;
 
-  const color =
+  const styles =
     variant === "success"
-      ? "bg-slate-900 text-white"
+      ? "bg-ink text-paper"
       : "bg-red-600 text-white";
+  const iconColor = variant === "success" ? "text-blue-400" : "text-white/70";
 
   return (
     <div
       role="status"
       aria-live="polite"
-      className={`fixed bottom-6 right-6 px-4 py-2 rounded-md shadow-lg text-sm ${color}`}
+      className={`fixed bottom-6 right-6 flex items-center gap-3 px-5 py-3 rounded-full shadow-2xl text-sm font-medium animate-in fade-in slide-in-from-bottom-2 ${styles}`}
     >
-      {message}
+      <span className={`inline-block h-2 w-2 rounded-full ${iconColor === "text-blue-400" ? "bg-blue-400" : "bg-white/70"}`} aria-hidden />
+      <span>{message}</span>
     </div>
   );
 }

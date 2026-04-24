@@ -13,17 +13,20 @@ export function StorageBanner() {
   if (!show) return null;
 
   return (
-    <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 flex items-center justify-between text-sm text-amber-800">
-      <span>
-        Drafts and sender details can't be saved in this browser session (localStorage unavailable).
+    <div className="bg-ink text-paper px-6 py-2.5 flex items-center justify-between text-xs">
+      <span className="flex items-center gap-2">
+        <span className="font-mono tracking-[0.2em] uppercase text-paper/50">Heads up</span>
+        <span className="text-paper/90">
+          Drafts can't be saved in this browser session — localStorage is unavailable.
+        </span>
       </span>
       <button
         type="button"
         onClick={() => setShow(false)}
-        className="ml-4 text-amber-800 hover:text-amber-900"
+        className="ml-4 h-6 w-6 inline-flex items-center justify-center rounded-full text-paper/60 hover:text-paper hover:bg-paper/10 transition-colors"
         aria-label="Dismiss"
       >
-        ×
+        <span className="text-base leading-none">×</span>
       </button>
     </div>
   );

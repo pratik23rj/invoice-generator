@@ -48,23 +48,46 @@ export function ActionBar({ onDownloadSuccess, onDownloadError, onReset }: Props
     }
   });
 
+  const disabled = !isValid || isSubmitting || downloading;
+
   return (
-    <section className="flex items-center justify-end gap-3 pt-2">
-      <button
-        type="button"
-        onClick={onReset}
-        className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900"
-      >
-        Reset
-      </button>
-      <button
-        type="button"
-        onClick={generate}
-        disabled={!isValid || isSubmitting || downloading}
-        className="px-5 py-2 rounded-md bg-blue-600 text-white text-sm font-semibold shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {downloading ? "Generating…" : "Generate PDF"}
-      </button>
+    <section className="flex items-center justify-between gap-3 pt-4">
+      <p className="hidden sm:block text-xs text-ink/40 italic">
+        Everything stays in your browser. No accounts, no uploads.
+      </p>
+      <div className="flex items-center gap-3 ml-auto">
+        <button
+          type="button"
+          onClick={onReset}
+          className="px-4 py-2.5 text-sm font-medium text-ink/60 hover:text-ink transition-colors"
+        >
+          Reset
+        </button>
+        <button
+          type="button"
+          onClick={generate}
+          disabled={disabled}
+          className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-600 text-white text-sm font-medium shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_4px_12px_rgba(37,99,235,0.25)] hover:bg-blue-700 hover:shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_6px_18px_rgba(37,99,235,0.35)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+        >
+          <span>{downloading ? "Generating…" : "Generate PDF"}</span>
+          <svg
+            aria-hidden
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            className="transition-transform group-hover:translate-x-0.5 group-disabled:translate-x-0"
+          >
+            <path
+              d="M3 7h8m0 0L7 3m4 4l-4 4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
     </section>
   );
 }

@@ -2,12 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body { @apply bg-white text-slate-900 antialiased; }
+html, body {
+  @apply bg-paper text-ink antialiased;
+}
+
+/* A very subtle paper grain — adds atmosphere without noise */
+body {
+  background-image:
+    radial-gradient(1200px 800px at 100% 0%, rgba(37, 99, 235, 0.04), transparent 60%),
+    radial-gradient(900px 600px at 0% 100%, rgba(15, 19, 25, 0.025), transparent 55%);
+  background-attachment: fixed;
+}
 
 @layer base {
   :focus-visible {
-    @apply outline-none ring-2 ring-blue-600 ring-offset-1 ring-offset-white;
+    @apply outline-none ring-2 ring-blue-600 ring-offset-2 ring-offset-paper;
   }
+
+  /* Tabular numerals everywhere numbers appear */
+  input[type="number"],
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -16,5 +33,11 @@ html, body { @apply bg-white text-slate-900 antialiased; }
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[0.65rem] tracking-[0.25em] uppercase text-ink/40;
   }
 }

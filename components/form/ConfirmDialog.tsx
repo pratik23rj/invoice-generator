@@ -41,24 +41,29 @@ export function ConfirmDialog({
   return (
     <dialog
       ref={dialogRef}
-      className="rounded-lg p-0 shadow-xl backdrop:bg-slate-900/40"
+      className="rounded-2xl p-0 bg-paper shadow-2xl backdrop:bg-ink/50 backdrop:backdrop-blur-sm"
       aria-labelledby="confirm-title"
     >
-      <div className="p-5 max-w-sm">
-        <h3 id="confirm-title" className="text-base font-semibold">{title}</h3>
-        <p className="text-sm text-slate-600 mt-1">{description}</p>
-        <div className="mt-4 flex justify-end gap-2">
+      <div className="p-6 max-w-md">
+        <p className="font-mono text-[0.65rem] tracking-[0.25em] uppercase text-ink/40 mb-2">
+          Confirm
+        </p>
+        <h3 id="confirm-title" className="font-display text-2xl leading-tight text-ink">
+          {title}
+        </h3>
+        <p className="text-sm text-ink/60 mt-3 leading-relaxed">{description}</p>
+        <div className="mt-6 flex justify-end gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="px-3 py-1.5 text-sm text-slate-700 hover:text-slate-900"
+            className="px-4 py-2 text-sm text-ink/60 hover:text-ink transition-colors"
           >
             {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="px-3 py-1.5 rounded-md bg-red-600 text-white text-sm font-medium hover:bg-red-700"
+            className="px-4 py-2 rounded-full bg-ink text-paper text-sm font-medium hover:bg-ink/90 transition-colors"
           >
             {confirmLabel}
           </button>

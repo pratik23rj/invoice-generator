@@ -3,17 +3,16 @@
 import { useFormContext } from "react-hook-form";
 import type { Invoice } from "@/lib/schema";
 import { FormField } from "./FormField";
+import { SectionCard } from "@/components/ui/SectionCard";
 
 const inputBase =
-  "w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600";
+  "w-full rounded-lg border border-stone-300 bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink/30 transition-colors focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20";
 
 export function SenderSection() {
   const { register } = useFormContext<Invoice>();
 
   return (
-    <section className="bg-white rounded-lg border border-slate-200 p-5 space-y-4">
-      <h2 className="text-lg font-semibold">Your details</h2>
-
+    <SectionCard number="01" title="Your details">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField<Invoice> name="sender.name" label="Your Name" required>
           {({ id }) => (
@@ -36,7 +35,7 @@ export function SenderSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FormField<Invoice> name="sender.gstin" label="GSTIN" hint="Optional">
           {({ id }) => (
-            <input id={id} className={inputBase} maxLength={15} placeholder="22AAAAA0000A1Z5" {...register("sender.gstin")} />
+            <input id={id} className={`${inputBase} font-mono`} maxLength={15} placeholder="22AAAAA0000A1Z5" {...register("sender.gstin")} />
           )}
         </FormField>
         <FormField<Invoice> name="sender.email" label="Email" hint="Optional">
@@ -50,6 +49,6 @@ export function SenderSection() {
           )}
         </FormField>
       </div>
-    </section>
+    </SectionCard>
   );
 }

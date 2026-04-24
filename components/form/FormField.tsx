@@ -31,13 +31,16 @@ export function FormField<T extends FieldValues>({
       : "";
 
   return (
-    <div className="space-y-1">
-      <label htmlFor={id} className="block text-sm font-medium text-slate-700">
+    <div className="space-y-1.5">
+      <label
+        htmlFor={id}
+        className="block font-mono text-[0.65rem] uppercase tracking-[0.15em] text-ink/50"
+      >
         {label}
-        {required ? <span className="text-red-600"> *</span> : null}
+        {required ? <span className="text-blue-600 ml-0.5">*</span> : null}
       </label>
       {children({ id, invalid: Boolean(message) })}
-      {hint && !message ? <p className="text-xs text-slate-500">{hint}</p> : null}
+      {hint && !message ? <p className="text-xs text-ink/40 italic">{hint}</p> : null}
       {message ? <p className="text-xs text-red-600">{message}</p> : null}
     </div>
   );

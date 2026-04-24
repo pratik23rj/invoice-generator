@@ -3,7 +3,7 @@
 import { useFormContext, useWatch } from "react-hook-form";
 import type { Invoice } from "@/lib/schema";
 import { computeTotals } from "@/lib/calculations";
-import { formatRupees } from "@/lib/indianNumber";
+import { formatRupees, formatIndianNumber } from "@/lib/indianNumber";
 import { rupeesInWords } from "@/lib/numberToWords";
 
 export function TotalsSummary() {
@@ -11,39 +11,66 @@ export function TotalsSummary() {
   const lineItems = useWatch({ control, name: "lineItems" }) ?? [];
   const tax = useWatch({ control, name: "tax" }) ?? { cgstPercent: 0, sgstPercent: 0 };
 
-  // Filter out rows with NaN numeric fields to stay safe during typing.
   const safeItems = lineItems.filter(
-    (i) => typeof i?.quantity === "number" && typeof i?.rate === "number"
+    (i) =>
+      typeof i?.quantity === "number" &&
+      Number.isFinite(i.quantity) &&
+      typeof i?.rate === "number" &&
+      Number.isFinite(i.rate)
   );
   const totals = computeTotals(safeItems as Invoice["lineItems"], tax);
 
   return (
-    <section className="bg-white rounded-lg border border-slate-200 p-5 space-y-3">
-      <h2 className="text-lg font-semibold">Totals</h2>
+    <section className="relative overflow-hidden rounded-2xl border border-ink/10 bg-ink text-paper p-7 md:p-9 shadow-card">
+      {/* decorative accent bar */}
+      <div className="absolute top-0 right-0 h-full w-1 bg-blue-600" aria-hidden />
 
-      <dl className="space-y-2 text-sm">
-        <div className="flex justify-between">
-          <dt className="text-slate-600">Subtotal</dt>
-          <dd className="tabular-nums">{formatRupees(totals.subtotal)}</dd>
+      <div className="flex items-baseline gap-3 mb-6">
+        <span className="font-mono text-[0.65rem] tracking-[0.25em] uppercase text-paper/40">
+          07
+        </span>
+        <h2 className="font-display text-[1.75rem] leading-none text-paper">Total due</h2>
+      </div>
+
+      <dl className="space-y-2.5 text-sm border-b border-paper/10 pb-5 mb-5">
+        <div className="flex justify-between items-baseline">
+          <dt className="text-paper/60">Subtotal</dt>
+          <dd className="tabular-nums font-mono text-paper">{formatRupees(totals.subtotal)}</dd>
         </div>
-        <div className="flex justify-between">
-          <dt className="text-slate-600">CGST ({tax.cgstPercent}%)</dt>
-          <dd className="tabular-nums">{formatRupees(totals.cgstAmount)}</dd>
+        <div className="flex justify-between items-baseline">
+          <dt className="text-paper/60">
+            CGST <span className="font-mono text-paper/40">· {tax.cgstPercent}%</span>
+          </dt>
+          <dd className="tabular-nums font-mono text-paper">{formatRupees(totals.cgstAmount)}</dd>
         </div>
-        <div className="flex justify-between">
-          <dt className="text-slate-600">SGST ({tax.sgstPercent}%)</dt>
-          <dd className="tabular-nums">{formatRupees(totals.sgstAmount)}</dd>
-        </div>
-        <div className="flex justify-between border-t border-slate-200 pt-2">
-          <dt className="font-semibold">Grand Total</dt>
-          <dd className="font-semibold tabular-nums">{formatRupees(totals.grandTotal)}</dd>
+        <div className="flex justify-between items-baseline">
+          <dt className="text-paper/60">
+            SGST <span className="font-mono text-paper/40">· {tax.sgstPercent}%</span>
+          </dt>
+          <dd className="tabular-nums font-mono text-paper">{formatRupees(totals.sgstAmount)}</dd>
         </div>
       </dl>
 
-      <p className="text-xs italic text-slate-600">{rupeesInWords(totals.grandTotal)}</p>
+      <div className="flex items-end justify-between gap-4 mb-5">
+        <span className="font-mono text-[0.65rem] tracking-[0.25em] uppercase text-paper/50 pb-2">
+          Grand total
+        </span>
+        <div className="text-right">
+          <span className="font-display text-5xl md:text-6xl leading-none tabular-nums text-paper">
+            <span className="text-paper/40 text-3xl md:text-4xl mr-1 align-top">₹</span>
+            {formatIndianNumber(totals.grandTotal)}
+          </span>
+        </div>
+      </div>
+
+      <p className="font-display italic text-base leading-snug text-paper/70 border-t border-paper/10 pt-4">
+        {rupeesInWords(totals.grandTotal)}
+      </p>
 
       {totals.grandTotal === 0 ? (
-        <p className="text-xs text-amber-600">Grand total is ₹0.00 — you can still download.</p>
+        <p className="mt-4 text-xs text-amber-300/90">
+          Grand total is ₹0.00 — you can still download.
+        </p>
       ) : null}
     </section>
   );

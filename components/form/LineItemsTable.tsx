@@ -5,40 +5,46 @@ import type { Invoice } from "@/lib/schema";
 import { newLineItemId } from "@/lib/defaults";
 import { lineAmount } from "@/lib/calculations";
 import { formatIndianNumber } from "@/lib/indianNumber";
+import { SectionCard } from "@/components/ui/SectionCard";
 
 const cellInput =
-  "w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600";
+  "w-full rounded-md border border-stone-200 bg-white px-2.5 py-2 text-sm text-ink placeholder:text-ink/30 transition-colors focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20";
+
+const numCell = `${cellInput} text-right font-mono tabular-nums`;
 
 export function LineItemsTable() {
   const { control, register, formState } = useFormContext<Invoice>();
   const { fields, append, remove } = useFieldArray({ control, name: "lineItems" });
   const liveItems = useWatch({ control, name: "lineItems" });
 
+  const addItem = () =>
+    append({ id: newLineItemId(), description: "", hsnSac: undefined, quantity: 1, rate: 0 });
+
   return (
-    <section className="bg-white rounded-lg border border-slate-200 p-5 space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Line items</h2>
+    <SectionCard
+      number="04"
+      title="Line items"
+      action={
         <button
           type="button"
-          onClick={() =>
-            append({ id: newLineItemId(), description: "", hsnSac: undefined, quantity: 1, rate: 0 })
-          }
-          className="text-sm font-medium text-blue-600 hover:text-blue-700"
+          onClick={addItem}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
         >
-          + Add item
+          <span className="text-lg leading-none -mt-0.5">+</span>
+          <span>Add item</span>
         </button>
-      </div>
-
-      <div className="overflow-x-auto">
+      }
+    >
+      <div className="overflow-x-auto -mx-1">
         <table className="w-full text-sm">
-          <thead className="text-xs text-slate-500">
-            <tr>
-              <th className="text-left font-medium pb-2 w-8">#</th>
-              <th className="text-left font-medium pb-2">Description</th>
-              <th className="text-left font-medium pb-2 w-24">HSN/SAC</th>
-              <th className="text-right font-medium pb-2 w-20">Qty</th>
-              <th className="text-right font-medium pb-2 w-28">Rate (₹)</th>
-              <th className="text-right font-medium pb-2 w-28">Amount (₹)</th>
+          <thead>
+            <tr className="border-b border-ink/20">
+              <th className="text-left font-mono text-[0.65rem] uppercase tracking-[0.15em] text-ink/50 pb-3 pl-1 w-8">#</th>
+              <th className="text-left font-mono text-[0.65rem] uppercase tracking-[0.15em] text-ink/50 pb-3 px-1">Description</th>
+              <th className="text-left font-mono text-[0.65rem] uppercase tracking-[0.15em] text-ink/50 pb-3 px-1 w-24">HSN/SAC</th>
+              <th className="text-right font-mono text-[0.65rem] uppercase tracking-[0.15em] text-ink/50 pb-3 px-1 w-20">Qty</th>
+              <th className="text-right font-mono text-[0.65rem] uppercase tracking-[0.15em] text-ink/50 pb-3 px-1 w-28">Rate ₹</th>
+              <th className="text-right font-mono text-[0.65rem] uppercase tracking-[0.15em] text-ink/50 pb-3 px-1 w-28">Amount ₹</th>
               <th className="w-8" />
             </tr>
           </thead>
@@ -46,17 +52,27 @@ export function LineItemsTable() {
             {fields.map((field, index) => {
               const row = liveItems?.[index];
               const amount =
-                row && typeof row.quantity === "number" && typeof row.rate === "number"
+                row &&
+                typeof row.quantity === "number" &&
+                Number.isFinite(row.quantity) &&
+                typeof row.rate === "number" &&
+                Number.isFinite(row.rate)
                   ? lineAmount(row)
                   : 0;
               const err = formState.errors.lineItems?.[index];
               return (
-                <tr key={field.id} className="align-top">
-                  <td className="pt-2 pr-2 text-slate-500">{index + 1}</td>
-                  <td className="pt-2 pr-2">
+                <tr
+                  key={field.id}
+                  className="align-top border-b border-stone-100 last:border-b-0 group"
+                >
+                  <td className="py-3 pl-1 pr-2 font-mono text-xs text-ink/40">
+                    {String(index + 1).padStart(2, "0")}
+                  </td>
+                  <td className="py-3 px-1">
                     <input
                       className={cellInput}
                       maxLength={200}
+                      placeholder="Service or product"
                       aria-invalid={Boolean(err?.description)}
                       {...register(`lineItems.${index}.description`)}
                     />
@@ -64,16 +80,17 @@ export function LineItemsTable() {
                       <p className="text-xs text-red-600 mt-1">{err.description.message}</p>
                     ) : null}
                   </td>
-                  <td className="pt-2 pr-2">
+                  <td className="py-3 px-1">
                     <input
-                      className={cellInput}
+                      className={`${cellInput} font-mono`}
                       maxLength={10}
+                      placeholder="—"
                       {...register(`lineItems.${index}.hsnSac`)}
                     />
                   </td>
-                  <td className="pt-2 pr-2">
+                  <td className="py-3 px-1">
                     <input
-                      className={`${cellInput} text-right`}
+                      className={numCell}
                       type="number"
                       inputMode="decimal"
                       step="0.01"
@@ -85,9 +102,9 @@ export function LineItemsTable() {
                       <p className="text-xs text-red-600 mt-1">{err.quantity.message}</p>
                     ) : null}
                   </td>
-                  <td className="pt-2 pr-2">
+                  <td className="py-3 px-1">
                     <input
-                      className={`${cellInput} text-right`}
+                      className={numCell}
                       type="number"
                       inputMode="decimal"
                       step="0.01"
@@ -98,16 +115,18 @@ export function LineItemsTable() {
                       <p className="text-xs text-red-600 mt-1">{err.rate.message}</p>
                     ) : null}
                   </td>
-                  <td className="pt-2 pr-2 text-right tabular-nums">{formatIndianNumber(amount)}</td>
-                  <td className="pt-2 text-right">
+                  <td className="py-3 px-1 text-right font-mono tabular-nums text-ink">
+                    {formatIndianNumber(amount)}
+                  </td>
+                  <td className="py-3 pl-1 text-right">
                     {fields.length > 1 ? (
                       <button
                         type="button"
                         onClick={() => remove(index)}
                         aria-label={`Remove line ${index + 1}`}
-                        className="text-slate-400 hover:text-red-600"
+                        className="h-7 w-7 inline-flex items-center justify-center rounded-md text-ink/30 opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 transition-all"
                       >
-                        ×
+                        <span className="text-lg leading-none">×</span>
                       </button>
                     ) : null}
                   </td>
@@ -121,6 +140,6 @@ export function LineItemsTable() {
       {formState.errors.lineItems?.message ? (
         <p className="text-xs text-red-600">{String(formState.errors.lineItems.message)}</p>
       ) : null}
-    </section>
+    </SectionCard>
   );
 }
